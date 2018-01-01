@@ -49,64 +49,6 @@ class Blog extends Component {
         }
     }
 
-    componentDidMount() {
-        // Adding title tag to page
-        document.title = 'Blog Posts about Open Source Artificial Intelligence for Personal Assistants, Robots, Help Desks and Chatbots - SUSI.AI';
-        //  Scrolling to top of page when component loads
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
-        //  Ajax call to convert the RSS feed to JSON format
-        $.ajax({
-            url: 'https://api.rss2json.com/v1/api.json',
-            method: 'GET',
-            dataType: 'json',
-            data: {
-                'rss_url': 'http://blog.fossasia.org/tag/susi-ai/feed/',
-                'api_key': 'qsmzjtyycc49whsfvf5ikzottxrbditq3burojhd', // put your api key here
-                'count': 50
-            }
-        }).done(function (response) {
-            if (response.status !== 'ok') { throw response.message; }
-            this.setState({ posts: response.items, postRendered: true });
-        }.bind(this));
-    }
-
-    scrollStep() {
-        if (window.pageYOffset === 0) {
-            clearInterval(this.state.intervalId);
-        }
-        window.scroll(0, window.pageYOffset - 1000);
-    }
-    //  Function to scroll to top of page
-    scrollToTop() {
-        let intervalId = setInterval(this.scrollStep.bind(this), 16.66);
-        this.setState({ intervalId: intervalId });
-    }
-    // Function to navigate to previous page
-    previousPage = () => {
-        let current = this.state.startPage;
-        if (current - 10 === 0) {
-            this.setState({ startPage: current - 10, prevDisplay: 'hidden', nextDisplay: 'visible' })
-        }
-        else {
-            this.setState({ startPage: current - 10, prevDisplay: 'visible', nextDisplay: 'visible' })
-        }
-        this.scrollToTop();
-    }
-    // Function to navigate to next page
-    nextPage = () => {
-        let current = this.state.startPage;
-        let size = this.state.posts.length;
-        console.log(size)
-        if (current + 10 === size - 10) {
-            this.setState({ startPage: current + 10, nextDisplay: 'hidden', prevDisplay: 'visible' })
-        }
-        else {
-            this.setState({ startPage: current + 10, prevDisplay: 'visible', nextDisplay: 'visible' })
-        }
-        this.scrollToTop();
-    }
-
-
     render() {
         const {
             FacebookShareButton,
